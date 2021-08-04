@@ -1,0 +1,50 @@
+name: Continuous deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+  deploy:
+    name: Deploy to aeons.dk
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - name: Install node dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: deploy
+      - name: Deploy
+        uses: pulumi/actions@v3
+        with:
+          command: up
+          stack-name: default
+          work-dir: deploy
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
