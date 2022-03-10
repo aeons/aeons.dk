@@ -35,6 +35,7 @@ const ingress = new k8s.networking.v1.Ingress("aeons", {
     },
   },
   spec: {
+    ingressClassName: "nginx",
     rules: [
       {
         host: "aeons.dk",
