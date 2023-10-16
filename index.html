@@ -12,11 +12,11 @@
         width: 100%;
         border-radius: 10px;
         box-shadow: 0 0 10px black;
-        -webkit-animation: 2s psychedelic-kitty linear infinite;
+        animation: 2s psychedelic-kitty linear infinite;
       }
-      @-webkit-keyframes psychedelic-kitty {
-        0%    { -webkit-filter: hue-rotate(0); }
-        100%  { -webkit-filter: hue-rotate(360deg); }
+      @keyframes psychedelic-kitty {
+        0%    { filter: hue-rotate(0); }
+        100%  { filter: hue-rotate(360deg); }
       }
     </style>
   </head>
@@ -27,6 +27,6 @@
       And with strange <strong>aeons</strong> even death may die.
     </p>
 
-    <img src="kitty.jpg">
+    <img alt="Kitty" src="kitty.jpg">
   </body>
 </html>
