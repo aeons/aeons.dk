@@ -22,7 +22,7 @@ const service = new k8s.core.v1.Service("aeons", {
   },
   spec: {
     selector: deployment.spec.selector.matchLabels,
-    ports: [{ port: 80 }],
+    ports: [{ port: 80, targetPort: 8080 }],
   },
 });
 
